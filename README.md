@@ -178,7 +178,4 @@ Colección recomendada:
 ## 📄 Licencia
 Este proyecto se distribuye con fines educativos. Ajusta la licencia según tus necesidades (MIT, Apache-2.0, etc.).
 
----
 
-### Créditos / Fuente académica
-Resumen y guías compiladas a partir del documento de la entrega (PDF) incluido en el repositorio.
