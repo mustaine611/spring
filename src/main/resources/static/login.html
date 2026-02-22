@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+</head>
+<body>
+
+<h2 id="title"></h2>
+
+<form method="post" action="/login">
+    <label id="usernameLabel"></label><br>
+    <input type="text" name="username"><br><br>
+
+    <label id="passwordLabel"></label><br>
+    <input type="password" name="password"><br><br>
+
+    <button type="submit" id="loginButton"></button>
+</form>
+
+<br>
+
+<button onclick="changeLang('es')">ES</button>
+<button onclick="changeLang('en')">EN</button>
+<button onclick="changeLang('pt')">PT</button>
+
+<script>
+    function getLang() {
+        const params = new URLSearchParams(window.location.search);
+        return params.get("lang") || "en";
+    }
+
+    function changeLang(lang) {
+        window.location.href = "/login.html?lang=" + lang;
+    }
+
+    fetch("/login?lang=" + getLang())
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById("title").innerText = data.title;
+            document.getElementById("usernameLabel").innerText = data.username;
+            document.getElementById("passwordLabel").innerText = data.password;
+            document.getElementById("loginButton").innerText = data.button;
+        });
+</script>
+
+</body>
+</html>

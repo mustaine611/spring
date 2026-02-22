@@ -5,7 +5,9 @@ import org.springframework.context.MessageSource;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 @RestController
 public class CustomerController {
@@ -31,5 +33,16 @@ public class CustomerController {
     @GetMapping("/")
     public String home(Locale locale) {
         return messageSource.getMessage("home.text", null, locale);
+    }
+
+    // NUEVO: textos del formulario de login traducidos
+    @GetMapping("/login")
+    public Map<String, String> login(Locale locale) {
+        Map<String, String> texts = new HashMap<>();
+        texts.put("title", messageSource.getMessage("login.title", null, locale));
+        texts.put("username", messageSource.getMessage("login.username", null, locale));
+        texts.put("password", messageSource.getMessage("login.password", null, locale));
+        texts.put("button", messageSource.getMessage("login.button", null, locale));
+        return texts;
     }
 }
