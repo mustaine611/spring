@@ -30,8 +30,10 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(csrf -> csrf.disable())
+                .csrf(csrf -> csrf.disable()) // Deshabilita CSRF temporalmente para pruebas
                 .authorizeHttpRequests(auth -> auth
+                        // Permitir los endpoints de auth para register/login/recover
+                        .requestMatchers("/auth/**").permitAll()
                         .requestMatchers("/public", "/login").permitAll()
                         .requestMatchers("/admin").hasRole("ADMIN")
                         .requestMatchers("/user").hasAnyRole("USER", "ADMIN")
