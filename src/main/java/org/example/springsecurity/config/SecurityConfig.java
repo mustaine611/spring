@@ -34,15 +34,12 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         // Permitir los endpoints de auth para register/login/recover
                         .requestMatchers("/auth/**").permitAll()
-                        .requestMatchers("/public", "/login").permitAll()
+                        .requestMatchers("/public", "/login.html").permitAll()
                         .requestMatchers("/admin").hasRole("ADMIN")
                         .requestMatchers("/user").hasAnyRole("USER", "ADMIN")
                         .anyRequest().authenticated()
                 )
-                .formLogin(form -> form
-                        .loginPage("/login")
-                        .permitAll()
-                );
+               ;
 
         return http.build();
     }
