@@ -2,18 +2,20 @@ package org.example.springsecurity.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
+import org.springframework.security.config.web.server.ServerHttpSecurity;
+import org.springframework.security.core.userdetails.MapReactiveUserDetailsService;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
-import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.server.SecurityWebFilterChain;
 
 @Configuration
+@EnableWebFluxSecurity
 public class SecurityConfig {
 
     @Bean
-    public UserDetailsService userDetailsService() {
+    public MapReactiveUserDetailsService userDetailsService() {
+
         UserDetails admin = User.withUsername("admin")
                 .password("{noop}admin123")
                 .roles("ADMIN")
@@ -24,23 +26,26 @@ public class SecurityConfig {
                 .roles("USER")
                 .build();
 
-        return new InMemoryUserDetailsManager(admin, user);
+        return new MapReactiveUserDetailsService(admin, user);
     }
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http
-                .csrf(csrf -> csrf.disable()) // Deshabilita CSRF temporalmente para pruebas
-                .authorizeHttpRequests(auth -> auth
-                        // Permitir los endpoints de auth para register/login/recover
-                        .requestMatchers("/auth/**").permitAll()
-                        .requestMatchers("/public", "/login.html").permitAll()
-                        .requestMatchers("/admin").hasRole("ADMIN")
-                        .requestMatchers("/user").hasAnyRole("USER", "ADMIN")
-                        .anyRequest().authenticated()
-                )
-               ;
+    public SecurityWebFilterChain securityFilterChain(ServerHttpSecurity http) {
 
-        return http.build();
+        return http
+                .csrf(ServerHttpSecurity.CsrfSpec::disable)
+
+                .authorizeExchange(exchange -> exchange
+                        .pathMatchers("/auth/**").permitAll()
+                        .pathMatchers("/public", "/login.html").permitAll()
+                        .pathMatchers("/admin").hasRole("ADMIN")
+                        .pathMatchers("/user").hasAnyRole("USER", "ADMIN")
+                        .anyExchange().authenticated()
+                )
+
+                .httpBasic(ServerHttpSecurity.HttpBasicSpec::disable)
+                .formLogin(ServerHttpSecurity.FormLoginSpec::disable)
+
+                .build();
     }
 }

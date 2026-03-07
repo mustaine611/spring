@@ -5,6 +5,7 @@ import org.example.springsecurity.dto.RecoverRequest;
 import org.example.springsecurity.model.Customer;
 import org.example.springsecurity.service.AuthService;
 import org.springframework.web.bind.annotation.*;
+import reactor.core.publisher.Mono;
 
 @RestController
 @RequestMapping("/auth")
@@ -17,22 +18,29 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public Customer register(@RequestParam String name,
-                             @RequestParam String email,
-                             @RequestParam String password){
-        System.out.println("llamando al endopoint register: " + email);
-        return authService.register(name, email, password);
+    public Mono<Customer> register(@RequestBody Customer customer) {
+
+        System.out.println("Calling register endpoint: " + customer.getEmail());
+
+        return authService.register(customer);
     }
 
     @PostMapping("/login")
-    public Customer login(@RequestBody LoginRequest request) {
-        return authService.login(request.getEmail(), request.getPassword());
+    public Mono<Customer> login(@RequestBody LoginRequest request) {
+
+        return authService
+                .findByEmail(request.getEmail())
+                .filter(customer -> customer.getPassword().equals(request.getPassword()));
     }
 
     @PostMapping("/recover")
-    public String recover(@RequestBody RecoverRequest request) {
-        System.out.println("llamando al endopoint recover: ");
-        authService.recover(request.getEmail());
-        return "Recovery process started";
+    public Mono<String> recover(@RequestBody RecoverRequest request) {
+
+        System.out.println("Calling recover endpoint");
+
+        return authService
+                .findByEmail(request.getEmail())
+                .map(customer -> "Recovery process started")
+                .defaultIfEmpty("Email not found");
     }
 }
