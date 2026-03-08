@@ -6,6 +6,7 @@ import org.example.springsecurity.repository.OrderRepository;
 import org.example.springsecurity.repository.ProductRepository;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
+import reactor.core.publisher.Flux;
 
 @Service
 public class OrderService {
@@ -42,5 +43,8 @@ public class OrderService {
     public Mono<String> getOrderStatus(Long id) {
         return orderRepository.findById(id)
                 .map(Order::getStatus);
+    }
+    public Flux<Order> getOrders() {
+        return orderRepository.findAll();
     }
 }

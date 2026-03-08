@@ -5,6 +5,7 @@ import org.example.springsecurity.model.Order;
 import org.example.springsecurity.service.OrderService;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
+import reactor.core.publisher.Flux;
 
 @RestController
 @RequestMapping("/orders")
@@ -32,5 +33,11 @@ public class OrderController {
     @GetMapping("/{id}/status")
     public Mono<String> getOrderStatus(@PathVariable Long id) {
         return orderService.getOrderStatus(id);
+    }
+
+    // listar pedidos
+    @GetMapping
+    public Flux<Order> getOrders() {
+        return orderService.getOrders();
     }
 }
