@@ -41,7 +41,7 @@ public class SecurityConfig {
                 .csrf(ServerHttpSecurity.CsrfSpec::disable)
 
                 .authorizeExchange(exchange -> exchange
-                        .pathMatchers("/auth/**","/products","/products/**").permitAll()
+                        .pathMatchers("/auth/**","/products","/products/**", "/orders/**").permitAll()
                         .pathMatchers(org.springframework.http.HttpMethod.OPTIONS, "/**").permitAll()
                         .pathMatchers("/public", "/login.html").permitAll()
                         .pathMatchers("/admin").hasRole("ADMIN")
