@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+@CrossOrigin(origins = "http://localhost:5173")
 @RestController
 @RequestMapping("/products")
 public class ProductController {
