@@ -11,16 +11,18 @@ const CatalogPage = () => {
   };
 
   return (
-    <div>
-      <h1>Catalogo</h1>
+    <div className="auth-container">
+        <div>
+          <h1>Catalogo</h1>
 
-      {products.map((product) => (
-        <ProductCard
-          key={product.id}
-          product={product}
-          onBuy={handleBuy}
-        />
-      ))}
+          {products.map((product) => (
+            <ProductCard
+              key={product.id}
+              product={product}
+              onBuy={handleBuy}
+            />
+          ))}
+        </div>
     </div>
   );
 };

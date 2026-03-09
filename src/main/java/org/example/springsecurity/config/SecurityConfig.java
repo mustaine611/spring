@@ -43,7 +43,7 @@ public class SecurityConfig {
                 .authorizeExchange(exchange -> exchange
                         .pathMatchers("/auth/**","/products","/products/**", "/orders/**").permitAll()
                         .pathMatchers(org.springframework.http.HttpMethod.OPTIONS, "/**").permitAll()
-                        .pathMatchers("/public", "/login.html").permitAll()
+                        .pathMatchers("/public").permitAll()
                         .pathMatchers("/admin").hasRole("ADMIN")
                         .pathMatchers("/user").hasAnyRole("USER", "ADMIN")
                         .anyExchange().authenticated()
